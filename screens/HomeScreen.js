@@ -1,3 +1,4 @@
+
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
@@ -12,30 +13,60 @@ import {
 } from 'react-native';
 
 import { MonoText } from '../components/StyledText';
+//import Keypad from '../keypad';
 
 export default class  HomeScreen extends React.Component{
-  render(){
-    let rows=[]
-    for(let i=0;i<3;i++){
-      let row=[]
-        for(let j=0;j<3;j++)
-        row.push(<TouchableOpacity><Text style={{color:'white',fontSize:20}}>{i+j+1}</Text></TouchableOpacity>)
-     rows.push(<View style={styles.row}>{row}</View>)
+  constructor(){
+    super();
+    this.state={
+      result:''
     }
+  }
+  buttonPressed(num){
+    if(num==='AC')
+    this.setState({
+      result:''
+    })
+    else
+    this.setState({
+        result:this.state.result+num
+    })
+}
+   render(){
+    let rows=[]
+    let num = [[1,2,3],[4,5,6],[7,8,9],['.',' ',0]]
+    for(let i=0;i<=3;i++){
+      let row=[]
+        for(let j=0;j<=2;j++)
+        row.push(<TouchableOpacity  onPress={()=>this.buttonPressed(num[i][j])}><Text style={{color:'white',fontSize:20}}>{num[i][j]}</Text></TouchableOpacity>)
+     rows.push(<View style={styles.row} >{row}</View>)
+    }
+    let row2 =[]
+    let rows2=[]
+    let operations =  ['x','-','+','='];
+    for(let a=0;a<=3;a++){
+        row2.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations[a])}><Text style={{color:'black',fontSize:20,padding:51}}>{operations[a]}</Text></TouchableOpacity>)
+     }
+      rows2.push(<View>{row2}</View>)
+     
+      let row3=[]
+      let rows3=[]
+      let operations2=['AC','±','%','÷']
+      for(let b=0;b<=3;b++){
+        row3.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations2[b])}><Text style={{color:'black',fontSize:20,padding:45}}>{operations2[b]}</Text></TouchableOpacity>)
+     }
+      rows3.push(<View style={{flexDirection:'row'}}>{row3}</View>)
   return (
       <View style={styles.container}>
           
           <View style={styles.resultText}>
-             <Text style={{fontSize:45,paddingTop:70,alignItems:'center',color:'white'}}>1222</Text>
+             <Text style={{fontSize:45,paddingTop:70,alignItems:'center',color:'white'}}>{this.state.result}</Text>
           </View>
 
             <View style={styles.total}>
 
                       <View style={styles.numbers1}>
-                        <Button title='AC'></Button>
-                        <Button title='/'></Button>
-                        <Button title='%'></Button>
-                        <Button title='÷'></Button>
+                         {rows3}
                       </View>
 
                  <View style={styles.buttons}>
@@ -46,9 +77,7 @@ export default class  HomeScreen extends React.Component{
                   
                     
                         <View style={styles.operations}>
-                            <Button title='x'></Button>
-                            <Button title='-'></Button>
-                            <Button title='+'></Button>
+                          {rows2}
                         </View>
                
                    </View>
@@ -58,12 +87,35 @@ export default class  HomeScreen extends React.Component{
 
     );
   }
-}
+    negative=()=>{
+      this.setState({
+        result:this.state.result * -1
+      })
+    }
+    percent=()=>{
+      this.setState({
+        result:(this.state.result/100)
+      })
+    }
+    reset=()=>{
+      this.setState({
+        result:""
+      })
+    }
+    calculate=()=>{
+      this.setState({
+        result: eval(this.state.result)
+      });
+    }
+  }
 
-HomeScreen.navigationOptions = {
-  header: null,
-};
 
+
+
+  HomeScreen.navigationOptions = {
+    header: null,
+  };
+  
 
 function handleLearnMorePress() {
   WebBrowser.openBrowserAsync(
@@ -83,7 +135,7 @@ const styles = StyleSheet.create({
   },
   resultText:{
     flex:0.4,
-    backgroundColor:'green',
+    backgroundColor:'gray',
     alignItems:'flex-end',
     justifyContent:'center'
   },
@@ -93,7 +145,7 @@ const styles = StyleSheet.create({
   },
   numbers:{
     flex:0.84,
-    backgroundColor:'blue'
+    backgroundColor:'lightblue'
   },
   row:{
     flex:1,
@@ -102,9 +154,10 @@ const styles = StyleSheet.create({
     alignItems:'center',
   },
   operations:{
+    flex:0.08,
     justifyContent:'space-around',
-    paddingLeft:20,
-    flex:0.08
+    alignItems:'center',
+  
   },
   btn:{
     color:'white'
@@ -113,7 +166,7 @@ const styles = StyleSheet.create({
   backgroundColor:'blue',
   flex:0.5,
   justifyContent:'space-around',
-  flexDirection:'row',
+  flexDirection:'column',
   fontSize:25,
   backgroundColor:'white',
   alignItems:'center'
