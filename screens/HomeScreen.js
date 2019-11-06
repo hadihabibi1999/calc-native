@@ -23,18 +23,35 @@ export default class  HomeScreen extends React.Component{
     }
   }
   buttonPressed(num){
-    if(num==='AC')
-    this.setState({
-      result:''
-    })
+      if(num==='<') 
+      this.back()
     else
-    this.setState({
+      if(num==='±')
+      this.negative()
+    else
+      if(num==='%')
+      this.percent()
+    else
+      if(num==='=')
+      this.calculate()
+    else
+      if(num==='AC')
+      this.reset()
+    else
+     // if(num==='*'||'-'||'+'||'/')
+     // this.operation(num)
+ // else
+      this.setState({
         result:this.state.result+num
     })
-}
+  }
+
+  
+
+
    render(){
     let rows=[]
-    let num = [[1,2,3],[4,5,6],[7,8,9],['.',' ',0]]
+    let num = [[1,2,3],[4,5,6],[7,8,9],[' . ',0,'<']]
     for(let i=0;i<=3;i++){
       let row=[]
         for(let j=0;j<=2;j++)
@@ -43,7 +60,7 @@ export default class  HomeScreen extends React.Component{
     }
     let row2 =[]
     let rows2=[]
-    let operations =  ['x','-','+','='];
+    let operations =  ['*','-','+','=']//x
     for(let a=0;a<=3;a++){
         row2.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations[a])}><Text style={{color:'black',fontSize:20,padding:51}}>{operations[a]}</Text></TouchableOpacity>)
      }
@@ -51,7 +68,7 @@ export default class  HomeScreen extends React.Component{
      
       let row3=[]
       let rows3=[]
-      let operations2=['AC','±','%','÷']
+      let operations2=['AC','±','%','/']//÷
       for(let b=0;b<=3;b++){
         row3.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations2[b])}><Text style={{color:'black',fontSize:20,padding:45}}>{operations2[b]}</Text></TouchableOpacity>)
      }
@@ -61,6 +78,8 @@ export default class  HomeScreen extends React.Component{
           
           <View style={styles.resultText}>
              <Text style={{fontSize:45,paddingTop:70,alignItems:'center',color:'white'}}>{this.state.result}</Text>
+             
+            
           </View>
 
             <View style={styles.total}>
@@ -107,7 +126,21 @@ export default class  HomeScreen extends React.Component{
         result: eval(this.state.result)
       });
     }
-  }
+    back=()=>{
+      let text = this.state.result.split('')
+      text.pop()
+      this.setState({
+        result:text.join('')
+      })
+    }
+    operation=(num)=>{
+      const lastChar = this.state.result.split('').pop()
+      if(num.indexOf(lastChar)>0) return
+      this.setState({
+        result:this.state.result+num
+      })
+    } 
+   }
 
 
 
