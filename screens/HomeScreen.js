@@ -19,33 +19,63 @@ export default class  HomeScreen extends React.Component{
   constructor(){
     super();
     this.state={
-      result:''
+      result:'',
+      calculationText:''
     }
-  }
-  buttonPressed(num){
-      if(num==='<') 
-      this.back()
-    else
-      if(num==='±')
-      this.negative()
-    else
-      if(num==='%')
-      this.percent()
-    else
-      if(num==='=')
-      this.calculate()
-    else
-      if(num==='AC')
-      this.reset()
-    else
-     // if(num==='*'||'-'||'+'||'/')
-     // this.operation(num)
- // else
-      this.setState({
-        result:this.state.result+num
-    })
+     this.operations =  ['*','-','+','=']//x
   }
 
+
+
+calculateResult(){
+  const text = this.state.result
+  this.setState({
+    calculationText:eval(text)
+  })
+}
+
+
+
+  buttonPressed(text){
+    if(text=='<')
+     this.back()
+    else
+      this.setState({
+        result:this.state.result+text})
+  }
+
+
+
+operationPressed(operation){
+switch(operation){
+  
+  case '=':
+  return this.calculateResult()
+  case '%':
+  this.percent()
+  break;
+  case 'AC':
+  this.reset()
+  break;
+  case '±':
+  this.negative()
+  break;
+
+  case '+':
+  case '-':
+  case '*':
+  case '/':
+  const lastChar = this.state.result.split('').pop() 
+
+  if(this.operations.indexOf(lastChar) > 0) return
+
+  if(this.state.text=='')return
+
+  this.setState({
+    result:this.state.result + operation
+    });
+  }
+}
   
 
 
@@ -55,31 +85,34 @@ export default class  HomeScreen extends React.Component{
     for(let i=0;i<=3;i++){
       let row=[]
         for(let j=0;j<=2;j++)
-        row.push(<TouchableOpacity  onPress={()=>this.buttonPressed(num[i][j])}><Text style={{color:'white',fontSize:20}}>{num[i][j]}</Text></TouchableOpacity>)
-     rows.push(<View style={styles.row} >{row}</View>)
+        row.push(<TouchableOpacity key={num[i][j]} onPress={()=>this.buttonPressed(num[i][j])}><Text style={{color:'#080808',fontSize:20}}>{num[i][j]}</Text></TouchableOpacity>)
+     rows.push(<View style={styles.row}>{row}</View>)
     }
+
+
     let row2 =[]
     let rows2=[]
-    let operations =  ['*','-','+','=']//x
     for(let a=0;a<=3;a++){
-        row2.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations[a])}><Text style={{color:'black',fontSize:20,padding:51}}>{operations[a]}</Text></TouchableOpacity>)
+        row2.push(<TouchableOpacity key={this.operations[a]} onPress={()=>this.operationPressed(this.operations[a])}><Text style={{color:'black',fontSize:20,padding:51,marginLeft:30}}>{this.operations[a]}</Text></TouchableOpacity>)
      }
       rows2.push(<View>{row2}</View>)
      
+
       let row3=[]
       let rows3=[]
       let operations2=['AC','±','%','/']//÷
       for(let b=0;b<=3;b++){
-        row3.push(<TouchableOpacity  onPress={()=>this.buttonPressed(operations2[b])}><Text style={{color:'black',fontSize:20,padding:45}}>{operations2[b]}</Text></TouchableOpacity>)
+        row3.push(<TouchableOpacity  key={operations2[b]} onPress={()=>this.operationPressed(operations2[b])}><Text style={{color:'black',fontSize:20,padding:45}}>{operations2[b]}</Text></TouchableOpacity>)
      }
       rows3.push(<View style={{flexDirection:'row'}}>{row3}</View>)
+
+
   return (
       <View style={styles.container}>
           
           <View style={styles.resultText}>
              <Text style={{fontSize:45,paddingTop:70,alignItems:'center',color:'white'}}>{this.state.result}</Text>
-             
-            
+             <Text style={{fontSize:20,alignItems:'center',color:'white'}}>{this.state.calculationText}</Text>
           </View>
 
             <View style={styles.total}>
@@ -118,28 +151,19 @@ export default class  HomeScreen extends React.Component{
     }
     reset=()=>{
       this.setState({
-        result:""
+        result:"",
+        calculationText:""
       })
     }
-    calculate=()=>{
-      this.setState({
-        result: eval(this.state.result)
-      });
-    }
+  
     back=()=>{
-      let text = this.state.result.split('')
+      const text = this.state.result.split('')
       text.pop()
       this.setState({
         result:text.join('')
-      })
+      });
     }
-    operation=(num)=>{
-      const lastChar = this.state.result.split('').pop()
-      if(num.indexOf(lastChar)>0) return
-      this.setState({
-        result:this.state.result+num
-      })
-    } 
+  
    }
 
 
@@ -168,7 +192,7 @@ const styles = StyleSheet.create({
   },
   resultText:{
     flex:0.4,
-    backgroundColor:'gray',
+    backgroundColor:'#4c4c4c',
     alignItems:'flex-end',
     justifyContent:'center'
   },
@@ -177,8 +201,8 @@ const styles = StyleSheet.create({
     flexDirection:"row",
   },
   numbers:{
-    flex:0.84,
-    backgroundColor:'lightblue'
+    flex:0.8,
+    backgroundColor:'#e0e0e0'
   },
   row:{
     flex:1,
@@ -187,22 +211,24 @@ const styles = StyleSheet.create({
     alignItems:'center',
   },
   operations:{
-    flex:0.08,
+    flex:0.09,
     justifyContent:'space-around',
     alignItems:'center',
+    backgroundColor:'white',
+  
   
   },
   btn:{
-    color:'white'
+    color:'#d6d6d6'
   },
   numbers1:{
-  backgroundColor:'blue',
+  backgroundColor:'white',
   flex:0.5,
   justifyContent:'space-around',
   flexDirection:'column',
   fontSize:25,
-  backgroundColor:'white',
-  alignItems:'center'
+  alignItems:'center',
+  paddingBottom:15
   },
   total:{
     flex:1,
