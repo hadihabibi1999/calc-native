@@ -3,8 +3,10 @@ import { ScrollView, View,  Text, StyleSheet} from 'react-native';
 import moment from 'moment';
 
   const Data = {
-    time:12345
+    time:12345,
+    laps:[1123, 4566, 23456, 43456]
   }
+
   function Timer({interval}) {
     const duration = moment.duration(interval)
     const centisecond = Math.floor(duration.milliseconds()/10)
@@ -28,16 +30,25 @@ import moment from 'moment';
   }
  
   function Lap ({number, interval}){
+    return(
     <View style={styles.lap}>
       <Text style={styles.lapText}>Lap {number} </Text>
       <Text style={styles.lapText}>{interval}</Text>
     </View>
+    )
   }
 
-  function LapsTable (laps){
-    <ScrollView>
-      {laps.map((lap,index)=>(<Lap number={index} interval={lap}/>))}
-    </ScrollView>
+  function LapsTable ({laps}){
+    return(
+      <ScrollView style={styles.ScrollView}>
+        {laps.map((lap,index)=>(
+          <Lap 
+            number={laps.length - index} 
+            interval={lap}
+            key={laps.length - index}
+          />))}
+      </ScrollView>
+    )
   }
 
 export default class LinksScreen extends Component {
@@ -50,7 +61,7 @@ export default class LinksScreen extends Component {
           <RoundButtons title='Reset' color='#FFFFFF' backgroundColor='#3D3D3D'/>
           <RoundButtons title='Start' color='#50D167' backgroundColor='#1B361F'/>
         </ButtonsRow>
-      
+          <LapsTable laps={Data.laps}/>
       </View>
     );
   }
@@ -95,6 +106,21 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       alignSelf:'stretch',
       justifyContent:'space-between',
-      marginTop:80
+      marginTop:80,
+      marginBottom:30
+    },
+    lapText:{
+      color:'#FFFFFF',
+      fontSize:18
+    },
+    ScrollView:{
+      alignSelf:'stretch',
+      borderColor:'#151515',
+      borderTopWidth:1,
+      paddingVertical:10,
+    },
+    lap:{
+      flexDirection:'row',
+      justifyContent:'space-between'
     }
-});
+  });
