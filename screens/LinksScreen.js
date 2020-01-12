@@ -14,7 +14,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
   function RoundButtons ({title,color,backgroundColor,onPress,disabled}){
   return (
-    <TouchableOpacity onPress={()=>!disabled && onPress() } activeOpacity={disabled ? 0.1 : 0.6} style={[styles.button,{backgroundColor:backgroundColor}]}> 
+    <TouchableOpacity onPress={()=>!disabled && onPress()} activeOpacity={disabled ? 0.1 : 0.6} style={[styles.button,{backgroundColor:backgroundColor}]}> 
       <View style={styles.buttonBorder}>
         <Text style={[styles.buttonTitle,{color}]}>{title}</Text>
       </View>
@@ -33,7 +33,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
       styles.lapText,
       fastest && styles.fastest,
       slowest && styles.slowest
-
     ]
     return(
     <View style={styles.lap}>

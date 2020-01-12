@@ -21,13 +21,15 @@ export default class  HomeScreen extends React.Component{
       result:'',
       calculationText:''
     }
-     this.operations =  ['*','-','+','=']//x
+     this.operations =  ['/','x','-','+','='] // x ÷
   }
 
 
 
 calculateResult(){
   const text = this.state.result
+  for(let i=0;i<text.length;i++)
+    text[i]=text[i].replace('x','*')
   this.setState({
     calculationText:eval(text)
   })
@@ -60,15 +62,19 @@ switch(operation){
   this.negative()
   break;
 
+  case 'x':
+  case '/':
+   
   case '+':
   case '-':
-  case '*':
-  case '/':
-  const lastChar = this.state.result.split('').pop() 
 
-  if(this.operations.indexOf(lastChar) > 0) return
+  const lastChar = this.state.result.split('').pop()
+
+  if(this.operations.indexOf(lastChar) >= 0 ) return
+  
 
   if(this.state.text=='')return
+
 
   this.setState({
     result:this.state.result + operation
@@ -76,6 +82,32 @@ switch(operation){
   }
 }
   
+
+ 
+negative=()=>{
+  this.setState({
+    result:this.state.result * -1
+  })
+}
+percent=()=>{
+  this.setState({
+    result:(this.state.result/100)
+  })
+}
+reset=()=>{
+  this.setState({
+    result:"",
+    calculationText:""
+  })
+}
+
+back=()=>{
+  const text = this.state.result.split('')
+  text.pop()
+  this.setState({
+    result:text.join('')
+  });
+}
 
 
    render(){
@@ -91,15 +123,15 @@ switch(operation){
 
     let row2 =[]
     let rows2=[]
-    for(let a=0;a<=3;a++){
-        row2.push(<TouchableOpacity key={this.operations[a]} onPress={()=>this.operationPressed(this.operations[a])}><Text style={{color:'black',fontSize:20,padding:51,marginLeft:30}}>{this.operations[a]}</Text></TouchableOpacity>)
+    for(let a=0;a<=4;a++){
+        row2.push(<TouchableOpacity key={this.operations[a]} onPress={()=>this.operationPressed(this.operations[a])}><Text style={{color:'black',fontSize:20,padding:47,marginLeft:30}}>{this.operations[a]}</Text></TouchableOpacity>)
      }
-      rows2.push(<View>{row2}</View>)
+      rows2.push(<View style={{marginBottom:100}}>{row2}</View>)
      
 
       let row3=[]
       let rows3=[]
-      let operations2=['AC','±','%','/']//÷
+      let operations2=['AC','±','%']
       for(let b=0;b<=3;b++){
         row3.push(<TouchableOpacity  key={operations2[b]} onPress={()=>this.operationPressed(operations2[b])}><Text style={{color:'black',fontSize:20,padding:45}}>{operations2[b]}</Text></TouchableOpacity>)
      }
@@ -138,31 +170,7 @@ switch(operation){
 
     );
   }
-    negative=()=>{
-      this.setState({
-        result:this.state.result * -1
-      })
-    }
-    percent=()=>{
-      this.setState({
-        result:(this.state.result/100)
-      })
-    }
-    reset=()=>{
-      this.setState({
-        result:"",
-        calculationText:""
-      })
-    }
-  
-    back=()=>{
-      const text = this.state.result.split('')
-      text.pop()
-      this.setState({
-        result:text.join('')
-      });
-    }
-  
+   
    }
 
 
