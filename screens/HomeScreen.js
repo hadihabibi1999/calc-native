@@ -21,15 +21,13 @@ export default class  HomeScreen extends React.Component{
       result:'',
       calculationText:''
     }
-     this.operations =  ['/','x','-','+','='] // x ÷
+     this.operations =  ['/','*','-','+','='] // x ÷
   }
 
 
 
 calculateResult(){
   const text = this.state.result
-  for(let i=0;i<text.length;i++)
-    text[i]=text[i].replace('x','*')
   this.setState({
     calculationText:eval(text)
   })
@@ -41,6 +39,9 @@ calculateResult(){
     if(text=='<')
      this.back()
     else
+   // if(text=='.')
+    // this.point()
+   // else
       this.setState({
         result:this.state.result+text})
   }
@@ -62,7 +63,7 @@ switch(operation){
   this.negative()
   break;
 
-  case 'x':
+  case '*':
   case '/':
    
   case '+':
