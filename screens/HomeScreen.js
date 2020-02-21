@@ -11,19 +11,34 @@ import {
   Button
 } from 'react-native';
 
-import { MonoText } from '../components/StyledText';
-//import Keypad from '../keypad';
+//import store from './redux';
+//import { MonoText } from '../components/StyledText';
+
+
+function Changing({color,rows}){
+  return (
+  <View style={[color,{flex:0.8}]}>
+  {rows}
+ </View>
+)}
 
 export default class  HomeScreen extends React.Component{
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
       result:'',
-      calculationText:''
+      calculationText:'',
+      changed:styles.numbers
     }
-     this.operations =  ['/','*','-','+','='] // x ÷
+  
+     this.operations = ['/','*','-','+','='] // x ÷
   }
 
+
+
+changingColor=()=>{
+this.setState({ changed:styles.numbers2 })
+}
 
 
 calculateResult(){
@@ -39,9 +54,9 @@ calculateResult(){
     if(text=='<')
      this.back()
     else
-   // if(text=='.')
-    // this.point()
-   // else
+    if(text=='cc')
+    this.changingColor()
+     else
       this.setState({
         result:this.state.result+text})
   }
@@ -111,9 +126,10 @@ back=()=>{
 }
 
 
+
    render(){
     let rows=[]
-    let num = [[1,2,3],[4,5,6],[7,8,9],[' . ',0,'<']]
+    let num = [[1,2,3],[4,5,6],[7,8,9],['cc',0,'<']]//.
     for(let i=0;i<=3;i++){
       let row=[]
         for(let j=0;j<=2;j++)
@@ -155,9 +171,9 @@ back=()=>{
 
                  <View style={styles.buttons}>
                
-                        <View style={styles.numbers}>
-                          {rows}
-                        </View>
+
+                        <Changing color={this.state.changed} rows={rows}/>
+                    
                   
                     
                         <View style={styles.operations}>
@@ -209,8 +225,10 @@ const styles = StyleSheet.create({
     flexDirection:"row",
   },
   numbers:{
-    flex:0.8,
-    backgroundColor:'#e0e0e0'
+    backgroundColor:'steelblue'
+  },
+  numbers2:{
+    backgroundColor:'skyblue'
   },
   row:{
     flex:1,

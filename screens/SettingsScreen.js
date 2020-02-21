@@ -1,14 +1,27 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import {View,TouchableOpacity,Text}from 'react-native';
+import {connect} from 'react-redux';
 
-export default function SettingsScreen() {
-  /**
-   * Go ahead and delete ExpoConfigView and replace it with your content;
-   * we just wanted to give you a quick view of your config.
-   */
-  return <ExpoConfigView />;
+export default class SettingsScreen extends React.Component{
+
+  color(){
+    this.props.dispatch({type:'secound'})
+  }
+  render(){
+    return(
+  <View style={{alignItems:'center'}}>
+    <TouchableOpacity onPress={()=>{this.color()}}><Text> change color </Text></TouchableOpacity>
+  </View>
+    )
+  }
 }
 
 SettingsScreen.navigationOptions = {
-  title: 'app.json',
+  title: 'settings',
 };
+
+const mapStateToProps = state => ({
+  color:state.color
+});
+
+//export default connect(mapStateToProps)(SettingsScreen);
